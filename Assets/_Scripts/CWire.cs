@@ -1,20 +1,26 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 using Camera = UnityEngine.Camera;
 
 public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private LineRenderer line;
+    [SerializeField] private CConnector currentConnector;
+
     private PointerEventData currentEventData;
     private bool isClicked;
     private Vector3 offSet;
     private Camera camera;
-    private CWire connectedWire;
-    private void Start()
+    private void Awake()
     {
         this.camera = Camera.main;
+        this.currentConnector.OnConnect += Connect;
+        this.currentConnector.OnDisconnect += Disconnect;
     }
-
+    //////////////////
+    /// UNITY METHODS
+    //////////////////
     public void OnPointerDown(PointerEventData eventData)
     {
         if (this.isClicked)
@@ -22,11 +28,7 @@ public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             return;
         }
 
-        if (this.connectedWire != null)
-        {
-            this.connectedWire.Disconnect();
-            this.connectedWire = null;
-        }
+        this.currentConnector.Disconect();
         
         Vector3 position = this.transform.position;
         this.offSet = position - this.TouchWorldPoint(eventData.position);
@@ -41,14 +43,18 @@ public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             return;
         }
-        
-        CheckToConnectWire();
+
+        TryConnectWire(); 
         
         this.currentEventData = null;
         this.isClicked = false;
     }
 
-    private void CheckToConnectWire()
+    /////////////////////
+    /// PRIVATE METHODS
+    /////////////////////
+    
+    private void TryConnectWire()
     {
         Vector3 position = this.camera.transform.position;
         Vector3 rayOrigin = position;
@@ -56,22 +62,15 @@ public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (Physics.Raycast(rayOrigin, rayDir, out RaycastHit hitInfo))
         {
-            CWire connectedWire = hitInfo.transform.GetComponent<CWire>();
-            
-            if (connectedWire != null)
+            CConnector connectionConnector = hitInfo.transform.GetComponent<CConnector>();
+
+            if(this.currentConnector.TryConnect(connectionConnector))
             {
-                this.line.SetPosition(1, hitInfo.transform.position);
-                connectedWire.Connect(this);
-            }
-            else
-            {
-                this.line.SetPosition(1, this.transform.position);
+                return;
             }
         }
-        else
-        {
-            this.line.SetPosition(1, this.transform.position);
-        }
+
+        this.currentConnector.Disconect();
     }
 
     private void Update()
@@ -81,20 +80,22 @@ public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             this.line.SetPosition(1, this.TouchWorldPoint(currentEventData.position) + offSet);
         }
     }
-
     private Vector3 TouchWorldPoint(Vector3 touchPoint)
     {
         touchPoint.z = camera.WorldToScreenPoint(this.transform.position).z;
         return camera.ScreenToWorldPoint(touchPoint);
     }
-
-    public void Connect(CWire connectedWire)
+    private void Connect(CConnector connector)
     {
-        this.connectedWire = connectedWire;
+        this.line.SetPosition(1, connector.transform.position);
     }
-
-    public void Disconnect()
+    private void Disconnect(CConnector connector)
     {
+        this.line.SetPosition(0, this.transform.position);
         this.line.SetPosition(1, this.transform.position);
     }
+
+    ////////////////////
+    /// PUBLIC METHODS
+    ////////////////////
 }
