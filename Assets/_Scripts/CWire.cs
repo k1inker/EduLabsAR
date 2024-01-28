@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 using Camera = UnityEngine.Camera;
 
 public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
@@ -17,6 +16,11 @@ public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         this.camera = Camera.main;
         this.currentConnector.OnConnect += Connect;
         this.currentConnector.OnDisconnect += Disconnect;
+    }
+    private void OnDisable()
+    {
+        this.currentConnector.OnConnect -= Connect;
+        this.currentConnector.OnDisconnect -= Disconnect;
     }
     //////////////////
     /// UNITY METHODS
@@ -49,11 +53,17 @@ public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         this.currentEventData = null;
         this.isClicked = false;
     }
-
+    private void Update()
+    {
+        if (this.isClicked)
+        {
+            this.line.SetPosition(1, this.TouchWorldPoint(currentEventData.position) + offSet);
+        }
+    }
     /////////////////////
     /// PRIVATE METHODS
     /////////////////////
-    
+
     private void TryConnectWire()
     {
         Vector3 position = this.camera.transform.position;
@@ -73,13 +83,6 @@ public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         this.currentConnector.Disconect();
     }
 
-    private void Update()
-    {
-        if (this.isClicked)
-        {
-            this.line.SetPosition(1, this.TouchWorldPoint(currentEventData.position) + offSet);
-        }
-    }
     private Vector3 TouchWorldPoint(Vector3 touchPoint)
     {
         touchPoint.z = camera.WorldToScreenPoint(this.transform.position).z;

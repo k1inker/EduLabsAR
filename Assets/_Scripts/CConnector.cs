@@ -1,15 +1,18 @@
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class CConnector : MonoBehaviour
 {
-    [SerializeField] private CElectricalComponent electricalComponent;
-
+    public CElectricalComponent electricalComponent {  get; private set; }
     public CConnector connectedConnector { get; private set; }
 
     public Action<CConnector> OnConnect;
     public Action<CConnector> OnDisconnect;
+
+    public void Init(CElectricalComponent electricalComponent)
+    {
+        this.electricalComponent = electricalComponent;
+    }
     public bool TryConnect(CConnector connectionConnector)
     {
         if (connectionConnector != null && !this.electricalComponent.IsOurComponentConnector(connectionConnector))
@@ -30,9 +33,10 @@ public class CConnector : MonoBehaviour
 
     public void Connect(CConnector connectionConnector)
     {
-        this.OnConnect?.Invoke(connectionConnector);
         this.connectedConnector = connectionConnector;
         connectionConnector.connectedConnector = this;
+
+        this.OnConnect?.Invoke(connectionConnector);
     }
     
     public void Disconect()
@@ -42,13 +46,13 @@ public class CConnector : MonoBehaviour
             this.connectedConnector.ForcedDisconect();
         }
 
-        this.OnDisconnect?.Invoke(this);
+        this.OnDisconnect?.Invoke(this.connectedConnector);
         this.connectedConnector = null;
     }
     
     public void ForcedDisconect()
     {
-        this.OnDisconnect?.Invoke(this);
+        this.OnDisconnect?.Invoke(this.connectedConnector);
         this.connectedConnector = null;
     }
 }
