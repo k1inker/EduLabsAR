@@ -249,8 +249,8 @@ GameObject:
   - component: {fileID: 4957764752085149362}
   - component: {fileID: 8449256295488086616}
   - component: {fileID: 328666787475232742}
-  - component: {fileID: 8077514200216482083}
   - component: {fileID: 6312477464506370630}
+  - component: {fileID: 8077514200216482083}
   m_Layer: 0
   m_Name: Accamulator
   m_TagString: Untagged
@@ -325,20 +325,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8077514200216482083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5318303904308318548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65a6cbe673a8cd04e8c361b2be55bbb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  connector1: {fileID: 3591208086409613716}
-  connector2: {fileID: 2269123726741729374}
 --- !u!65 &6312477464506370630
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -360,6 +346,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8077514200216482083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5318303904308318548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65a6cbe673a8cd04e8c361b2be55bbb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connector1: {fileID: 3591208086409613716}
+  connector2: {fileID: 2269123726741729374}
 --- !u!1 &8125873964905550894
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,21 +1,20 @@
-using System.Collections.Generic;
-using UnityEngine;
-public class СAccamulator : CElectricalComponent
+using System;
+
+namespace EduLab
 {
-    protected override void ConnectToElecticalComponent(CConnector connectedConnector)
+    public class СAccamulator : CElectricalComponent
     {
-        if(connector1.connectedConnector != null && connector2.connectedConnector != null)
+        public Action<bool> OnShortingCircuit;
+        protected override void ConnectToElecticalComponent(CConnector connectedConnector)
         {
-            var connectionList = connector1.connectedConnector.electricalComponent.CheckConnectedElectricalChain(this, this, new List<CElectricalComponent>());
-            foreach(var connection in connectionList)
+            if (connector1.connectedConnector != null && connector1.connectedConnector != null)
             {
-                Debug.Log(connection);
+                this.OnShortingCircuit.Invoke(true);
             }
         }
-    }
-
-    protected override void DisconnectElectricalComponent(CConnector connectedConnector)
-    {
-        
+        protected override void DisconnectElectricalComponent()
+        {
+            this.OnShortingCircuit.Invoke(false);
+        }
     }
 }

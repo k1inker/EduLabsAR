@@ -1,65 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CElectricalComponent : MonoBehaviour
+namespace EduLab
 {
-    [SerializeField] protected CConnector connector1;
-    [SerializeField] protected CConnector connector2;
+    public abstract class CElectricalComponent : MonoBehaviour
+    {
+        [SerializeField] protected CConnector connector1;
+        [SerializeField] protected CConnector connector2;
 
-    private Dictionary<CConnector, CElectricalComponent> connectedComponentsDictionary = new Dictionary<CConnector, CElectricalComponent>();
-    public void Awake()
-    {
-        this.connector1.Init(this);
-        this.connector2.Init(this);
-    }
-    public void Start()
-    {
-        this.connector1.OnConnect += ConnectToElecticalComponent;
-        this.connector2.OnConnect += ConnectToElecticalComponent;
-        this.connector1.OnDisconnect += DisconnectElectricalComponent;
-        this.connector2.OnDisconnect += DisconnectElectricalComponent;
-    }
-    private void OnDisable()
-    {
-        this.connector1.OnConnect -= ConnectToElecticalComponent;
-        this.connector2.OnConnect -= ConnectToElecticalComponent;
-        this.connector1.OnDisconnect -= DisconnectElectricalComponent;
-        this.connector2.OnDisconnect -= DisconnectElectricalComponent;
-    }
-    public bool IsOurComponentConnector(CConnector chekenConnector)
-    {
-        if (connector1.Equals(chekenConnector) || connector2.Equals(chekenConnector))
+        public Action OnConnect;
+        public Action OnDisconnect;
+        public void Init()
         {
-            return true;
+            this.connector1.Init(this);
+            this.connector2.Init(this);
         }
-        return false;
-    }
-    protected abstract void ConnectToElecticalComponent(CConnector connectedConnector);
-    protected abstract void DisconnectElectricalComponent(CConnector connectedConnector);
-    public List<CElectricalComponent> CheckConnectedElectricalChain(CElectricalComponent signalingComponent, СAccamulator accamulator, List<CElectricalComponent> connectionList)
-    {
-        if ((connector1.electricalComponent.Equals(signalingComponent)
-                && connector2.electricalComponent == null)
-            || (connector1.electricalComponent == null
-                && connector2.electricalComponent.Equals(signalingComponent)))
+        public void Start()
         {
-            return null;
+            this.connector1.OnConnect += ConnectToElecticalComponent;
+            this.connector2.OnConnect += ConnectToElecticalComponent;
+            this.connector1.OnDisconnect += DisconnectElectricalComponent;
+            this.connector2.OnDisconnect += DisconnectElectricalComponent;
         }
-
-        connectionList.Add(this);
-
-        if(connector1.electricalComponent.Equals(accamulator) || connector2.electricalComponent.Equals(accamulator))
+        private void OnDisable()
         {
-            return connectionList;
+            this.connector1.OnConnect -= ConnectToElecticalComponent;
+            this.connector2.OnConnect -= ConnectToElecticalComponent;
+            this.connector1.OnDisconnect -= DisconnectElectricalComponent;
+            this.connector2.OnDisconnect -= DisconnectElectricalComponent;
         }
-        
-        if(!connector1.electricalComponent.Equals(signalingComponent))
+        public bool IsOurComponentConnector(CConnector chekenConnector)
         {
-            return connector1.electricalComponent.CheckConnectedElectricalChain(signalingComponent, accamulator, connectionList);
+            if (connector1.Equals(chekenConnector) || connector2.Equals(chekenConnector))
+            {
+                return true;
+            }
+            return false;
         }
-        else
+        public List<CElectricalComponent> GetConnectedElectricalComponents()
         {
-            return connector2.electricalComponent.CheckConnectedElectricalChain(this, accamulator, connectionList);
+            List<CElectricalComponent> connectedComponents = new List<CElectricalComponent>();
+            if (connector1.connectedConnector != null)
+            {
+                connectedComponents.Add(connector1.connectedConnector.electricalComponent);
+            }
+            if(connector2.connectedConnector != null)
+            {
+                connectedComponents.Add(connector2.connectedConnector.electricalComponent);
+            }
+            return connectedComponents;
+        }
+        protected virtual void ConnectToElecticalComponent(CConnector connectedConnector)
+        {
+            this.OnConnect?.Invoke();
+        }
+        protected virtual void DisconnectElectricalComponent()
+        {
+            this.OnDisconnect?.Invoke();
         }
     }
 }
