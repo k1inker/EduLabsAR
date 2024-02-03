@@ -51,13 +51,25 @@ namespace EduLab
         }
         private void Refresh()
         {
-            if(CheckCicruit(this.accamulator.GetConnectedElectricalComponents(), null).Count > 0)
+            List<CElectricalComponent> connectedComponents = CheckCicruit(this.accamulator.GetConnectedElectricalComponents(), null);
+            if (connectedComponents.Count > 0)
             {
-                Debug.Log("Connected");
+                foreach(var electricalComponent in this.electricalComponents)
+                {
+                    if(connectedComponents.Contains(electricalComponent))
+                    {
+                        electricalComponent.Powered();
+                        continue;
+                    }
+                    electricalComponent.Unpowered();
+                }
             }
             else
             {
-                Debug.Log("Disconnect");
+                foreach (var electricalComponent in this.electricalComponents)
+                {
+                    electricalComponent.Unpowered();
+                }
             }
         }
         private List<CElectricalComponent> CheckCicruit(List<CElectricalComponent> components, CElectricalComponent prevComponent)

@@ -59,5 +59,7 @@ namespace EduLab
         {
             this.OnDisconnect?.Invoke();
         }
+        public abstract void Powered();
+        public abstract void Unpowered();
     }
 }
