@@ -149,6 +149,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 791688573}
     m_Modifications:
+    - target: {fileID: 1976050096663570729, guid: 527edc19bf8dce44dad85dec5cb3e545,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4957764752085149362, guid: 527edc19bf8dce44dad85dec5cb3e545,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -203,6 +208,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lamp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5802469535251919568, guid: 527edc19bf8dce44dad85dec5cb3e545,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1334,6 +1344,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 791688573}
     m_Modifications:
+    - target: {fileID: 1976050096663570729, guid: 527edc19bf8dce44dad85dec5cb3e545,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4957764752085149362, guid: 527edc19bf8dce44dad85dec5cb3e545,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1388,6 +1403,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lamp (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5802469535251919568, guid: 527edc19bf8dce44dad85dec5cb3e545,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2058,6 +2078,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 791688573}
     m_Modifications:
+    - target: {fileID: 3032184904215053343, guid: ffc0872db41b36e40a1f6fd225324070,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4957764752085149362, guid: ffc0872db41b36e40a1f6fd225324070,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2112,6 +2137,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Accamulator
+      objectReference: {fileID: 0}
+    - target: {fileID: 8894675414016280439, guid: ffc0872db41b36e40a1f6fd225324070,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

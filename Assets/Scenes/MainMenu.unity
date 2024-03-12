@@ -208,7 +208,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 54.65
+  m_fontSize: 65.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -918,7 +918,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60.65
+  m_fontSize: 72
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1577,7 +1577,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 122.7
+  m_fontSize: 125
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2790,7 +2790,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 2000}
+  m_ReferenceResolution: {x: 800, y: 1900}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
@@ -2859,6 +2859,7 @@ MonoBehaviour:
   multiplayerButton: {fileID: 363506125}
   exitButton: {fileID: 1624957084}
   backToMenuButton: {fileID: 790451943}
+  startLevelButtons: []
   mainMenu: {fileID: 1564113150}
   levelSelectMenu: {fileID: 1716051446}
 --- !u!1 &1984730208
@@ -3224,7 +3225,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: -200, y: -1300}
+  m_SizeDelta: {x: -200, y: -1100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2005616837
 MonoBehaviour:

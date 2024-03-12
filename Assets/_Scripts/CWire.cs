@@ -1,10 +1,11 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Camera = UnityEngine.Camera;
 
 namespace EduLab
 {
-    public class CWire : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class CWire : MonoBehaviourPunCallbacks, IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField] private LineRenderer line;
         [SerializeField] private CConnector currentConnector;
@@ -13,17 +14,20 @@ namespace EduLab
         private bool isClicked;
         private Vector3 offSet;
         private Camera camera;
+
         private void Awake()
         {
             this.camera = Camera.main;
-            this.currentConnector.OnConnect += Connect;
-            this.currentConnector.OnDisconnect += Disconnect;
+            this.currentConnector.OnConnect += (connector) => this.photonView.RPC(nameof(this.ConnectRPC), RpcTarget.All, connector.transform.position);
+            this.currentConnector.OnDisconnect += () => this.photonView.RPC(nameof(this.DisconnectRPC), RpcTarget.All);
         }
+
         private void OnDisable()
         {
-            this.currentConnector.OnConnect -= Connect;
-            this.currentConnector.OnDisconnect -= Disconnect;
+            this.currentConnector.OnConnect -= (connector) => this.photonView.RPC(nameof(this.DisconnectRPC), RpcTarget.All, connector.transform.position);
+            this.currentConnector.OnDisconnect -= () => this.photonView.RPC(nameof(this.DisconnectRPC), RpcTarget.All);
         }
+
         //////////////////
         /// UNITY METHODS
         //////////////////
@@ -33,14 +37,11 @@ namespace EduLab
             {
                 return;
             }
-
-            this.currentConnector.Disconect();
-
+            
             Vector3 position = this.transform.position;
             this.offSet = position - this.TouchWorldPoint(eventData.position);
-            this.isClicked = true;
             this.currentEventData = eventData;
-            this.line.SetPosition(0, position);
+            this.photonView.RPC(nameof(this.OnPointerDownRPC), RpcTarget.All, position);
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -49,23 +50,56 @@ namespace EduLab
             {
                 return;
             }
-
-            TryConnectWire();
-
+            
+            this.TryConnectWire();
             this.currentEventData = null;
-            this.isClicked = false;
+            this.photonView.RPC(nameof(this.OnPointerUpRPC), RpcTarget.All);
         }
         private void Update()
         {
-            if (this.isClicked)
+            if (this.isClicked && this.photonView.IsOwnerActive)
             {
-                this.line.SetPosition(1, this.TouchWorldPoint(currentEventData.position) + offSet);
+                this.photonView.RPC(nameof(this.OnUpdatePositionRPC), RpcTarget.All, 
+                    this.TouchWorldPoint(this.currentEventData.position) + offSet);
             }
+        }
+        
+        /////////////////////
+        /// NETWORK METHODS
+        /////////////////////
+        [PunRPC]
+        private void OnPointerDownRPC(Vector3 startPosition)
+        {
+            this.currentConnector.Disconect();
+            
+            this.line.SetPosition(0, startPosition);
+            this.isClicked = true;
+        }
+        [PunRPC]
+        private void OnPointerUpRPC()
+        {
+            this.isClicked = false;
+        }
+        [PunRPC]
+        private void OnUpdatePositionRPC(Vector3 endPosition)
+        {
+            this.line.SetPosition(1, endPosition);
+        }
+        [PunRPC]
+        private void ConnectRPC(Vector3 endPosition)
+        {
+            this.line.SetPosition(0, this.transform.position);
+            this.line.SetPosition(1, endPosition);
+        }
+        [PunRPC]
+        private void DisconnectRPC()
+        {
+            this.line.SetPosition(0, this.transform.position);
+            this.line.SetPosition(1, this.transform.position);
         }
         /////////////////////
         /// PRIVATE METHODS
         /////////////////////
-
         private void TryConnectWire()
         {
             Vector3 position = this.camera.transform.position;
@@ -90,17 +124,6 @@ namespace EduLab
             touchPoint.z = camera.WorldToScreenPoint(this.transform.position).z;
             return camera.ScreenToWorldPoint(touchPoint);
         }
-        private void Connect(CConnector connector)
-        {
-            this.line.SetPosition(0, this.transform.position);
-            this.line.SetPosition(1, connector.transform.position);
-        }
-        private void Disconnect()
-        {
-            this.line.SetPosition(0, this.transform.position);
-            this.line.SetPosition(1, this.transform.position);
-        }
-
         ////////////////////
         /// PUBLIC METHODS
         ////////////////////
