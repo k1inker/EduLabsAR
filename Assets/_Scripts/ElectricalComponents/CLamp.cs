@@ -6,14 +6,25 @@ namespace EduLab
 {
     public class CLamp : CElectricalComponent
     {
+        [SerializeField] private Light pointLight;
+
+        private const int offLightIntensity = 0;
+        private const int onLightIntensity = 5;
+        public override void Init()
+        {
+            base.Init();
+            
+            this.pointLight.intensity = offLightIntensity;
+        }
+
         public override void Powered()
         {
-            Debug.Log($"Connected {gameObject.name}");
+            this.pointLight.intensity = onLightIntensity;
         }
 
         public override void Unpowered()
         {
-            Debug.Log($"Disconnected {gameObject.name}");
+            this.pointLight.intensity = offLightIntensity;
         }
 
         protected override void ConnectToElecticalComponent(CConnector connectedConnector)

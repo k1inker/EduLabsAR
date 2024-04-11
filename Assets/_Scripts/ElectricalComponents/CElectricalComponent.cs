@@ -11,7 +11,7 @@ namespace EduLab
 
         public Action OnConnect;
         public Action OnDisconnect;
-        public void Init()
+        public virtual void Init()
         {
             this.connector1.Init(this);
             this.connector2.Init(this);

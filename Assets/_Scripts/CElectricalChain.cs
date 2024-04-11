@@ -47,6 +47,7 @@ namespace EduLab
             {
                 component.OnConnect -= Refresh;
                 component.OnDisconnect -= Refresh;
+                this.Refresh();
             }
         }
         private void Refresh()
