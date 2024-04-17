@@ -8,8 +8,9 @@ namespace EduLab
         [SerializeField] private CElectricalComponent[] electricalComponents;
 
         [SerializeField] private СAccamulator accamulator;
-
-        private List<CElectricalComponent> connectedComponentsWithChain = new List<CElectricalComponent>();
+        //===================//
+        // UNITY METHODS
+        //===================//
         private void Start()
         {
             foreach(var component in this.electricalComponents)
@@ -28,7 +29,9 @@ namespace EduLab
             }
             this.accamulator.OnDisconnect -= Refresh;
         }
-
+        //===================//
+        // PRIVATE METHODS
+        //===================//
         // for oprimisation subscribe methods
         private void RefreshStatusCicruit(bool isShorting)
         {
@@ -47,12 +50,16 @@ namespace EduLab
             {
                 component.OnConnect -= Refresh;
                 component.OnDisconnect -= Refresh;
-                this.Refresh();
+                component.Unpowered();
             }
         }
         private void Refresh()
         {
-            List<CElectricalComponent> connectedComponents = CheckCicruit(this.accamulator.GetConnectedElectricalComponents(), null);
+            List<CElectricalComponent> connectedComponentsWithChain = new List<CElectricalComponent>();
+            List<CElectricalComponent> connectedComponents = CheckCircuit(
+                this.accamulator.GetConnectedElectricalComponents(), 
+                null, 
+                connectedComponentsWithChain);
             if (connectedComponents.Count > 0)
             {
                 foreach(var electricalComponent in this.electricalComponents)
@@ -73,31 +80,39 @@ namespace EduLab
                 }
             }
         }
-        private List<CElectricalComponent> CheckCicruit(List<CElectricalComponent> components, CElectricalComponent prevComponent)
+        private List<CElectricalComponent> CheckCircuit(
+            List<CElectricalComponent> components, 
+            CElectricalComponent prevComponent,
+            List<CElectricalComponent> visited)
         {
             if(components.Count < 2)
             {
-                this.connectedComponentsWithChain.Clear();
-                return this.connectedComponentsWithChain;
+                return new List<CElectricalComponent>();
             }
 
             foreach(var component in components)
             {
                 if(component.Equals(this.accamulator))
                 {
-                    return this.connectedComponentsWithChain;
+                    visited.Add(component);
+                    return visited;
                 }
 
-                if(component.Equals(prevComponent))
+                if(component.Equals(prevComponent) || visited.Contains(component))
                 {
                     continue;
                 }
 
-                this.connectedComponentsWithChain.Add(component);
-                return CheckCicruit(component.GetConnectedElectricalComponents(), component);
+                visited.Add(component);
+                var result = this.CheckCircuit(component.GetConnectedElectricalComponents(), component, visited);
+                if (result.Count > 0)
+                {
+                    return result; // Якщо замкнення знайдено
+                }
+                visited.Remove(component);
             }
-
-            return this.connectedComponentsWithChain;
+            
+            return new List<CElectricalComponent>();
         }
     }
 }

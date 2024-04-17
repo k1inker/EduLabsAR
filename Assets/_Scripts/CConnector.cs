@@ -8,8 +8,12 @@ namespace EduLab
         public CConnector connectedConnector { get; private set; }
 
         public Action<CConnector> OnConnect;
+
         public Action OnDisconnect;
 
+        //===================//
+        // PUBLIC METHODS
+        //===================//
         public void Init(CElectricalComponent electricalComponent)
         {
             this.electricalComponent = electricalComponent;

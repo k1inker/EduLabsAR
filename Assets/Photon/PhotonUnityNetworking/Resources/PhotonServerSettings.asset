@@ -44,6 +44,9 @@ MonoBehaviour:
   - OnPointerUpRPC
   - ConnectRPC
   - DisconnectRPC
+  - TryConnectWire
+  - ForcedConnectRPC
+  - ForcedDisconnectRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

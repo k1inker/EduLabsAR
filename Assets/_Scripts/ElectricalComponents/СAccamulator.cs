@@ -23,10 +23,12 @@ namespace EduLab
             {
                 this.OnShortingCircuit.Invoke(true);
             }
+            base.ConnectToElecticalComponent(connectedConnector);
         }
         protected override void DisconnectElectricalComponent()
         {
             this.OnShortingCircuit.Invoke(false);
+            base.DisconnectElectricalComponent();
         }
     }
 }

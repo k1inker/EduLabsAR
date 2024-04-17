@@ -26,15 +26,5 @@ namespace EduLab
         {
             this.pointLight.intensity = offLightIntensity;
         }
-
-        protected override void ConnectToElecticalComponent(CConnector connectedConnector)
-        {
-
-        }
-
-        protected override void DisconnectElectricalComponent()
-        {
-
-        }
     }
 }

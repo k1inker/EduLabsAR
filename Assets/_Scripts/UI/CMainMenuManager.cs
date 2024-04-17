@@ -15,6 +15,10 @@ public class CMainMenuManager : MonoBehaviour
     [Header("Reference menu")]
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject levelSelectMenu;
+    
+    //===================//
+    // UNITY METHODS
+    //===================//
     private void Awake()
     {
         this.singleplayerButton.onClick.AddListener(this.OnSingleplayerClick);
@@ -29,6 +33,9 @@ public class CMainMenuManager : MonoBehaviour
         this.backToMenuButton.onClick.RemoveListener(this.OnBackToMenuClick);
         this.exitButton.onClick.RemoveListener(this.OnExitClick);
     }
+    //===================//
+    // PRIVATE METHODS
+    //===================//
     private void OnSingleplayerClick()
     {
         this.mainMenu.SetActive(false);
@@ -47,4 +54,7 @@ public class CMainMenuManager : MonoBehaviour
         this.levelSelectMenu.SetActive(false);
         this.mainMenu.SetActive(true);
     }
+    //===================//
+    // PUBLIC METHODS
+    //===================//
 }

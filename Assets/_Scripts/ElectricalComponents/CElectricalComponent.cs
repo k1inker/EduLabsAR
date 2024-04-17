@@ -11,11 +11,10 @@ namespace EduLab
 
         public Action OnConnect;
         public Action OnDisconnect;
-        public virtual void Init()
-        {
-            this.connector1.Init(this);
-            this.connector2.Init(this);
-        }
+        
+        //===================//
+        // UNITY METHODS
+        //===================//
         public void Start()
         {
             this.connector1.OnConnect += ConnectToElecticalComponent;
@@ -29,6 +28,15 @@ namespace EduLab
             this.connector2.OnConnect -= ConnectToElecticalComponent;
             this.connector1.OnDisconnect -= DisconnectElectricalComponent;
             this.connector2.OnDisconnect -= DisconnectElectricalComponent;
+        }
+        
+        //===================//
+        // PUBLIC METHODS
+        //===================//
+        public virtual void Init()
+        {
+            this.connector1.Init(this);
+            this.connector2.Init(this);
         }
         public bool IsOurComponentConnector(CConnector chekenConnector)
         {
@@ -51,15 +59,20 @@ namespace EduLab
             }
             return connectedComponents;
         }
+        public abstract void Powered();
+        public abstract void Unpowered();
+        
+        //===================//
+        // PRIVATE METHODS
+        //===================//
         protected virtual void ConnectToElecticalComponent(CConnector connectedConnector)
         {
+            
             this.OnConnect?.Invoke();
         }
         protected virtual void DisconnectElectricalComponent()
         {
             this.OnDisconnect?.Invoke();
         }
-        public abstract void Powered();
-        public abstract void Unpowered();
     }
 }
