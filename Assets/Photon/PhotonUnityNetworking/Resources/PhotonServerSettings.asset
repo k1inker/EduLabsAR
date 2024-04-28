@@ -35,18 +35,16 @@ MonoBehaviour:
   StartInOfflineMode: 0
   RpcList:
   - ClickRpc
+  - ConnectRPC
   - DestroyRpc
   - DestroySpaceship
+  - DisconnectRPC
   - Fire
-  - RespawnSpaceship
-  - OnUpdatePositionRPC
   - OnPointerDownRPC
   - OnPointerUpRPC
-  - ConnectRPC
-  - DisconnectRPC
+  - OnUpdatePositionRPC
+  - RespawnSpaceship
   - TryConnectWire
-  - ForcedConnectRPC
-  - ForcedDisconnectRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

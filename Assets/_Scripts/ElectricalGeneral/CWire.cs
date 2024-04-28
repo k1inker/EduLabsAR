@@ -23,7 +23,7 @@ namespace EduLab
             this.currentConnector.OnDisconnect += OnDisconnectWire;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             this.currentConnector.OnConnect -= OnConnectWire;
             this.currentConnector.OnDisconnect -= OnDisconnectWire;
