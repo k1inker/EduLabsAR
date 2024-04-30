@@ -9,7 +9,7 @@ namespace EduLab
         [SerializeField] private Light pointLight;
 
         private const int offLightIntensity = 0;
-        private const int onLightIntensity = 5;
+        private const int onLightIntensity = 1;
         public override void Init()
         {
             base.Init();

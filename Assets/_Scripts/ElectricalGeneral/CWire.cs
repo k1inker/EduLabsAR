@@ -1,5 +1,4 @@
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Camera = UnityEngine.Camera;
@@ -14,7 +13,7 @@ namespace EduLab
         private PointerEventData currentEventData;
         private bool isClicked;
         private Vector3 offSet;
-        private Camera camera;
+        private new Camera camera;
         private string interactingUserId;
         private void Awake()
         {
@@ -58,7 +57,7 @@ namespace EduLab
         }
         private void FixedUpdate()
         {
-            if (this.isClicked && PhotonNetwork.LocalPlayer.UserId.Equals(this.interactingUserId))
+            if (this.isClicked && (PhotonNetwork.OfflineMode || PhotonNetwork.LocalPlayer.UserId.Equals(this.interactingUserId)))
             {
                 this.photonView.RPC(nameof(this.OnUpdatePositionRPC), RpcTarget.All, 
                     this.TouchWorldPoint(this.currentEventData.position) + offSet);

@@ -1,21 +1,23 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CLevelCard : MonoBehaviour
+namespace EduLab
 {
-    [SerializeField] private Button levelStartButton;
-    [SerializeField] private int levelId;
-    private void Awake()
+    public class CLevelCard : MonoBehaviour
     {
-        this.levelStartButton.onClick.AddListener(OnLevelStartButton);
-    }
-    private void OnDestroy()
-    {
-        this.levelStartButton.onClick.RemoveListener(OnLevelStartButton);
-    }
-    private void OnLevelStartButton()
-    {
-        SceneManager.LoadScene(levelId);
+        [SerializeField] private Button levelStartButton;
+        [SerializeField] private int levelId;
+        private void Awake()
+        {
+            this.levelStartButton.onClick.AddListener(OnLevelStartButton);
+        }
+        private void OnDestroy()
+        {
+            this.levelStartButton.onClick.RemoveListener(OnLevelStartButton);
+        }
+        private void OnLevelStartButton()
+        {
+            CGameMenu.Instance.OnStartGame?.Invoke(levelId);
+        }
     }
 }
