@@ -62,6 +62,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   line: {fileID: 5339646406119226909}
   currentConnector: {fileID: 6824341589515812614}
+  collider: {fileID: 5331496497041411505}
 --- !u!120 &5339646406119226909
 LineRenderer:
   serializedVersion: 2

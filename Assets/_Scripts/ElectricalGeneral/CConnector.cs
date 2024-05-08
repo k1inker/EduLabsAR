@@ -28,24 +28,30 @@ namespace EduLab
                 }
                 else
                 {
-                    connectionConnector.Disconect();
+                    connectionConnector.Disconnect();
                     this.Connect(connectionConnector);
                 }
                 return true;
             }
             return false;
         }
-        public void ForcedDisconect()
+
+        public void Disconnect()
         {
             this.OnDisconnect?.Invoke();
+
+            if (this.connectedConnector != null)
+            {
+                this.connectedConnector.ForcedDisconnect();
+            }
+
             this.connectedConnector = null;
         }
-        public void ForcedConnect(CConnector connectionConnector)
-        {
-            this.connectedConnector = connectionConnector;
-            this.OnConnect?.Invoke(connectionConnector);
-        }
-
+        
+        //===================//
+        // PRIVATE METHODS
+        //===================//
+        
         private void Connect(CConnector connectionConnector)
         {
             this.connectedConnector = connectionConnector;
@@ -53,17 +59,17 @@ namespace EduLab
 
             this.OnConnect?.Invoke(connectionConnector);
         }
-
-        public void Disconect()
+        
+        private void ForcedDisconnect()
         {
             this.OnDisconnect?.Invoke();
-
-            if (this.connectedConnector != null)
-            {
-                this.connectedConnector.ForcedDisconect();
-            }
-
             this.connectedConnector = null;
+        }
+        
+        private void ForcedConnect(CConnector connectionConnector)
+        {
+            this.connectedConnector = connectionConnector;
+            this.OnConnect?.Invoke(connectionConnector);
         }
     }
 }

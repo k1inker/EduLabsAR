@@ -28,9 +28,11 @@ public class CMainMenuManager : MonoBehaviourPunCallbacks
         this.multiplayerButton.onClick.RemoveListener(this.OnMultiplayerClick);
         this.exitButton.onClick.RemoveListener(this.OnExitClick);
     }
+    
     //===================//
     // PRIVATE METHODS
     //===================//
+    
     private void OnSingleplayerClick()
     {
         PhotonNetwork.OfflineMode = true;
@@ -46,6 +48,7 @@ public class CMainMenuManager : MonoBehaviourPunCallbacks
     {
         Application.Quit();
     }
+    
     //===================//
     // PUBLIC METHODS
     //===================//

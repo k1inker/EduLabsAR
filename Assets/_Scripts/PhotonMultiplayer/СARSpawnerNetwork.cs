@@ -11,9 +11,7 @@ namespace EduLab
 {
     public class СARSpawnerNetwork : MonoBehaviourPunCallbacks
     {
-        [SerializeField] private CNickNameController nickNamePlayerPrefab;
         [SerializeField] private CLevelsConfig levelsConfig;
-        [SerializeField] private Transform cameraTransport;
         [SerializeField] private ARRaycastManager arRaycastManager;
         [SerializeField] private ARPlaneManager arPlaneManager;
 
@@ -30,7 +28,6 @@ namespace EduLab
 
         private void Init(int levelIndex)
         {
-            StartCoroutine(this.Connect());
             this.arRaycastManager.enabled = PhotonNetwork.IsMasterClient;
             this.arPlaneManager.enabled = PhotonNetwork.IsMasterClient;
 
@@ -110,21 +107,6 @@ namespace EduLab
             }
 
             this.arPlaneManager.enabled = false;
-        }
-
-        private IEnumerator Connect()
-        {
-            while (!PhotonNetwork.IsConnectedAndReady)
-            {
-                yield return null;
-            }
-
-            GameObject arPlayer = PhotonNetwork.Instantiate(nickNamePlayerPrefab.gameObject.name, Vector3.zero,
-                Quaternion.identity);
-
-            arPlayer.transform.SetParent(cameraTransport, false);
-
-            this.nickNamePlayerPrefab.SetNickName(PhotonNetwork.NickName);
         }
     }
 }

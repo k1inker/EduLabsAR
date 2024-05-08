@@ -1,16 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace EduLab
 {
     public class CElectricalChain : MonoBehaviour
     {
+        public static CElectricalChain Instance { get; private set; }
+        
         [SerializeField] private CElectricalComponent[] electricalComponents;
-
         [SerializeField] private СAccamulator accamulator;
+
+        private float timeToShowGameFinish = 3f;
+
+        public Action OnFinishGame;
+        
         //===================//
         // UNITY METHODS
         //===================//
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
         private void Start()
         {
             foreach(var component in this.electricalComponents)
@@ -29,9 +50,11 @@ namespace EduLab
             }
             this.accamulator.OnDisconnect -= Refresh;
         }
+        
         //===================//
         // PRIVATE METHODS
         //===================//
+        
         // for oprimisation subscribe methods
         private void RefreshStatusCicruit(bool isShorting)
         {
@@ -43,6 +66,7 @@ namespace EduLab
                     component.OnDisconnect += Refresh;
                 }
                 this.Refresh();
+                this.CheckPoweredElectricalComponents();
                 return;
             }
 
@@ -80,6 +104,21 @@ namespace EduLab
                 }
             }
         }
+
+        private void CheckPoweredElectricalComponents()
+        {
+            if (this.electricalComponents.All(component => component.IsPowered))
+            {
+                this.OnFinishGame?.Invoke();
+                StartCoroutine(this.StartShowGameFinish());
+            }
+        }
+        private IEnumerator StartShowGameFinish()
+        {
+            yield return new WaitForSeconds(this.timeToShowGameFinish);
+            CGameMenu.Instance.ShowGameFinishMenu();
+        }
+        
         private List<CElectricalComponent> CheckCircuit(
             List<CElectricalComponent> components, 
             CElectricalComponent prevComponent,

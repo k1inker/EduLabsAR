@@ -9,28 +9,33 @@ namespace EduLab
     {
         [SerializeField] private LineRenderer line;
         [SerializeField] private CConnector currentConnector;
+        [SerializeField] private Collider collider;
 
         private PointerEventData currentEventData;
         private bool isClicked;
         private Vector3 offSet;
         private new Camera camera;
         private string interactingUserId;
-        private void Awake()
+        
+        //===================//
+        // UNITY METHODS
+        //===================//
+        
+        private void Start()
         {
             this.camera = Camera.main;
-            this.currentConnector.OnConnect += OnConnectWire;
-            this.currentConnector.OnDisconnect += OnDisconnectWire;
+            this.currentConnector.OnConnect += this.OnConnectWire;
+            this.currentConnector.OnDisconnect += this.OnDisconnectWire;
+            CElectricalChain.Instance.OnFinishGame += this.DisableInteractables;
         }
 
         private void OnDestroy()
         {
-            this.currentConnector.OnConnect -= OnConnectWire;
-            this.currentConnector.OnDisconnect -= OnDisconnectWire;
+            this.currentConnector.OnConnect -= this.OnConnectWire;
+            this.currentConnector.OnDisconnect -= this.OnDisconnectWire;
+            CElectricalChain.Instance.OnFinishGame -= this.DisableInteractables;
         }
-
-        //===================//
-        // UNITY METHODS
-        //===================//
+        
         public void OnPointerDown(PointerEventData eventData)
         {
             if (this.isClicked)
@@ -67,10 +72,11 @@ namespace EduLab
         //===================//
         // RPC METHODS
         //===================//
+        
         [PunRPC]
         private void OnPointerDownRPC(Vector3 startPosition, string idUser)
         {
-            this.currentConnector.Disconect();
+            this.currentConnector.Disconnect();
             this.interactingUserId = idUser;
             
             this.line.SetPosition(0, startPosition);
@@ -83,7 +89,7 @@ namespace EduLab
             this.interactingUserId = string.Empty;
             if (!isConnectedSuccessful)
             {
-                this.currentConnector.Disconect();
+                this.currentConnector.Disconnect();
             }
         }
         [PunRPC]
@@ -110,7 +116,7 @@ namespace EduLab
             PhotonView targetView = PhotonView.Find(connectorViewId);
             if (targetView == null)
             {
-                this.currentConnector.Disconect();
+                this.currentConnector.Disconnect();
                 return;
             }
             
@@ -118,12 +124,14 @@ namespace EduLab
             
             if (!this.currentConnector.TryConnect(connectionConnector))
             {
-                this.currentConnector.Disconect();
+                this.currentConnector.Disconnect();
             }
         }
+        
         //===================//
         // PRIVATE METHODS
         //===================//
+        
         private void OnConnectWire(CConnector connector)
         {
             this.photonView.RPC(nameof(this.ConnectRPC), RpcTarget.All, connector.transform.position);
@@ -157,6 +165,11 @@ namespace EduLab
         {
             touchPoint.z = camera.WorldToScreenPoint(this.transform.position).z;
             return camera.ScreenToWorldPoint(touchPoint);
+        }
+
+        private void DisableInteractables()
+        {
+            this.collider.enabled = false;
         }
         //===================//
         // PUBLIC METHODS

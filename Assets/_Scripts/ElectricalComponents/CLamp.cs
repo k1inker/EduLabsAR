@@ -19,11 +19,13 @@ namespace EduLab
 
         public override void Powered()
         {
+            base.Powered();
             this.pointLight.intensity = onLightIntensity;
         }
 
         public override void Unpowered()
         {
+            base.Unpowered();
             this.pointLight.intensity = offLightIntensity;
         }
     }

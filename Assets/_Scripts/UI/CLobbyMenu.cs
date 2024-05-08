@@ -1,6 +1,7 @@
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CLobbyMenu : MonoBehaviourPunCallbacks
@@ -10,16 +11,10 @@ public class CLobbyMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button joinRoomButton;
     [SerializeField] private TMP_InputField createInput;
     [SerializeField] private TMP_InputField joinInput;
-
-    [Header("NickName Menu")] 
-    [SerializeField] private GameObject nickNameMenu;
-    [SerializeField] private TMP_InputField nickNameInputField;
-    [SerializeField] private Button setNickButton;
     private void Awake()
     {
         this.createRoomButton.onClick.AddListener(this.CreateRoom);
         this.joinRoomButton.onClick.AddListener(this.JoinRoom);
-        this.setNickButton.onClick.AddListener(this.SetNewNick);
     }
 
     private void OnDestroy()
@@ -41,13 +36,10 @@ public class CLobbyMenu : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PhotonNetwork.LoadLevel(3);
-        this.nickNameInputField.text = PhotonNetwork.NickName;
     }
 
-    private void SetNewNick()
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        PhotonNetwork.NickName = this.nickNameInputField.text;
-        this.nickNameMenu.SetActive(false);
-        this.lobbyMenu.SetActive(true);
+        base.OnJoinRoomFailed(returnCode, message);
     }
 }

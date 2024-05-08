@@ -9,6 +9,8 @@ namespace EduLab
         [SerializeField] protected CConnector connector1;
         [SerializeField] protected CConnector connector2;
 
+        public bool IsPowered { get; private set; }
+        
         public Action OnConnect;
         public Action OnDisconnect;
         
@@ -59,15 +61,22 @@ namespace EduLab
             }
             return connectedComponents;
         }
-        public abstract void Powered();
-        public abstract void Unpowered();
+        
+        public virtual void Powered()
+        {
+            this.IsPowered = true;
+        }
+
+        public virtual void Unpowered()
+        {
+            this.IsPowered = false;
+        }
         
         //===================//
         // PRIVATE METHODS
         //===================//
         protected virtual void ConnectToElecticalComponent(CConnector connectedConnector)
         {
-            
             this.OnConnect?.Invoke();
         }
         protected virtual void DisconnectElectricalComponent()
